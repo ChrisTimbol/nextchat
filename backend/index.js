@@ -15,3 +15,6 @@ io.on('connection', (socket) => {
       });
 })
 server.listen(8000)
+
+// socket is on port 8000
+// client must connect to port 8000 with socket io to send events from client
