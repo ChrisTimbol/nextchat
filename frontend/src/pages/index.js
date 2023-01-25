@@ -1,10 +1,14 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
-const inter = Inter({ subsets: ['latin'] })
+import { io } from "socket.io-client"
+import { useEffect, useState } from 'react'
+
+const socket = io('http://localhost:8000')
 
 export default function Home() {
+  // const [socket, setSocket] = useState(null)
+
   return (
     <>
       <Head>
@@ -14,8 +18,11 @@ export default function Home() {
         <link rel="icon" href="" />
       </Head>
       <main className={styles.main}>
-test
+        teststds
+        <br></br>
+ 
       </main>
     </>
   )
 }
+//https://nextjs.org/docs/advanced-features/custom-server
