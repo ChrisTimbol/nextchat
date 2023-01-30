@@ -7,7 +7,20 @@ import { useEffect, useState } from 'react'
 const socket = io('http://localhost:8000')
 
 export default function Home() {
-  // const [socket, setSocket] = useState(null)
+  const [chatText, setChatText] = useState("") // chat Typed in input
+  const [chatPrint, setChatPrint] = useState([]) // chat received from server
+
+  // sends 'chatText' to server with socket.emit func
+  const handlePost = (e) => { // 
+    socket.emit("chatToServer", { chatText })
+  }
+
+  // server listener for 'chatToClient' 
+  socket.on('chatToClient', (data) => {
+    // check if data is empty string
+    if(data) setChatPrint([...chatPrint, data]) 
+    setChatText("") // resetChatText
+  })
 
   return (
     <>
@@ -18,9 +31,17 @@ export default function Home() {
         <link rel="icon" href="" />
       </Head>
       <main className={styles.main}>
-        teststds
-        <br></br>
- 
+
+        {/* input for the user . onChange setsChatText state  */}
+        <input type="text" value={chatText} onChange={(e) => setChatText(e.target.value)}></input>
+        {/* When button is clicked it calls handlePost() */}
+        <button onClick={handlePost}>Send</button>
+{/*         {console.log(JSON.stringify(chatPrint))} */}
+         {chatPrint.map ((e) => (
+            <div><li>{e.chatText}</li></div>
+        ))} 
+        <br />
+
       </main>
     </>
   )
