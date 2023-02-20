@@ -14,13 +14,12 @@ export default function Home() {
   // use for reference of id
   const [newUserInputBox, setNewUserInputBox] = useState("") // what user typed in nickname input box
 
-
+/* Need to figure out how to have multiple nickname users */
 
   // This is what we receive back from server
   const [nickname, setNickName] = useState('')
 
-  // gets saved when user click send
-  const [nicknameSaved, setNickNameSaved] = useState('')
+
 
   // sends 'chatText' to server
   const sendChat = () => { // 
@@ -39,7 +38,6 @@ export default function Home() {
   })
 
   const sendUserToServer = (e) => {
-    setNickNameSaved(newUserInputBox)
     socket.emit("newUser", newUserInputBox)
   }
   return (
@@ -60,20 +58,22 @@ export default function Home() {
             <div className={styles.chatSentContainer}>
               {chatPrint.map((e) => (
                 <div className={styles.chatStyle}>
-                  {nickname == nicknameSaved ?
-                    (
+{/*                   {nickname == nicknameSaved ?
+                    ( 
+    */}
                       <>
                         <div className={styles.chatSender}>{nickname}:</div>
                         <div>{e}</div>
                       </>
-                    )
+{/*                     )
                     : 
                     (
                       <>
                         <div className={styles.chatReceiver}>{nickname}:</div>
                         <div>{e}</div>
                       </>
-                    )}
+                    )}  
+*/}
 
                 </div>
               ))}
