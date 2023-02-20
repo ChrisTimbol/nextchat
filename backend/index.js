@@ -1,6 +1,8 @@
 const app = require('express')()
 const server = require('http').createServer(app) // creeates web server
 
+const users = []
+// accept every1 connecting 
 const io = require('socket.io')(server, {
     cors: {
         origin: "*",
@@ -12,8 +14,7 @@ io.on('connection', (socket) => {
     socket.removeAllListeners()
     console.log(`user connected`)
 
-    socket.on('disconnect', function () {
-        socket.removeAllListeners();
+    socket.on('disconnect', function () { // disconnect
         console.log('user disconnected');
       });
 
@@ -21,6 +22,12 @@ io.on('connection', (socket) => {
         io.emit('chatToClient', data) // sends data to listeners that listen to 'chatPrint'
     })
 
+    socket.on('newUser', function(nickname){
+        socket.nickname = nickname
+        users.push(socket.nickname)
+        console.log(socket.nickname)
+        io.emit('nicknameToClient', socket.nickname)
+    })
 
 })
 server.listen(8000)
@@ -28,5 +35,3 @@ server.listen(8000)
 // socket is on port 8000
 // client must connect to port 8000 with socket io to send events from client
 // concurrency with package.json to start both servers
-// add on complexity of using more frameworks such as nextjs  
-// learned more about how useful packages can be

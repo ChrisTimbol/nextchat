@@ -10,18 +10,38 @@ export default function Home() {
   const [chatText, setChatText] = useState("") // chat Typed in input
   const [chatPrint, setChatPrint] = useState([]) // chat received from server
 
-  // sends 'chatText' to server with socket.emit func
-  const handlePost = (e) => { // 
-    socket.emit("chatToServer", { chatText })
-  }
 
+  // use for reference of id
+  const [newUserInputBox, setNewUserInputBox] = useState("") // what user typed in nickname input box
+
+
+
+  // This is what we receive back from server
+  const [nickname, setNickName] = useState('')
+
+  // gets saved when user click send
+  const [nicknameSaved, setNickNameSaved] = useState('')
+
+  // sends 'chatText' to server
+  const sendChat = () => { // 
+    socket.emit("chatToServer", chatText)
+  }
   // server listener for 'chatToClient' 
   socket.on('chatToClient', (data) => {
-    // check if data is empty string
-    if(data) setChatPrint([...chatPrint, data]) 
-    setChatText("") // resetChatText
+    if (data !== null && data.trim() !== "") setChatPrint([...chatPrint, data])
+    setChatText("")
   })
 
+
+  socket.on('nicknameToClient', (data) => {
+    setNickName(data)
+
+  })
+
+  const sendUserToServer = (e) => {
+    setNickNameSaved(newUserInputBox)
+    socket.emit("newUser", newUserInputBox)
+  }
   return (
     <>
       <Head>
@@ -32,18 +52,46 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
 
-        {/* input for the user . onChange setsChatText state  */}
-        <input type="text" value={chatText} onChange={(e) => setChatText(e.target.value)}></input>
-        {/* When button is clicked it calls handlePost() */}
-        <button onClick={handlePost}>Send</button>
-{/*         {console.log(JSON.stringify(chatPrint))} */}
-         {chatPrint.map ((e) => (
-            <div><li>{e.chatText}</li></div>
-        ))} 
-        <br />
+        <div className={styles.pageContainer}>
 
+
+          <div className={styles.chatContainer}>
+
+            <div className={styles.chatSentContainer}>
+              {chatPrint.map((e) => (
+                <div className={styles.chatStyle}>
+                  {nickname == nicknameSaved ?
+                    (
+                      <>
+                        <div className={styles.chatSender}>{nickname}:</div>
+                        <div>{e}</div>
+                      </>
+                    )
+                    : 
+                    (
+                      <>
+                        <div className={styles.chatReceiver}>{nickname}:</div>
+                        <div>{e}</div>
+                      </>
+                    )}
+
+                </div>
+              ))}
+            </div>
+
+            <div className={styles.bottomContainer}>
+              <input type="text" value={chatText} className={styles.inputBox} onChange={(e) => setChatText(e.target.value)}></input>
+              <button className={styles.sendButton} onClick={sendChat}>Send</button>
+            </div>
+          </div>
+        </div>
+        <div className={styles.nicknameContainer}>
+          Nickname:
+          <input type="text" value={newUserInputBox} className={styles.nicknameInput} onChange={(e) => setNewUserInputBox(e.target.value)}></input>
+          <button className={styles.nicknameButton} onClick={sendUserToServer}>Send</button>
+
+        </div>
       </main>
     </>
   )
 }
-//https://nextjs.org/docs/advanced-features/custom-server
