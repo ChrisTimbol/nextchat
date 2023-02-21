@@ -52,12 +52,16 @@ export default function Home() {
                   {e.user == message['user'] ?
                     <div className={styles.chatSender}>
                       <div className={styles.user}>{e.user}</div>
-                      <div className={styles.chatSenderWidth}><div className={styles.chatSenderColor}>{e.chatMessage} </div></div>
+                      <div className={styles.chatSenderWidth}> {/* Aligns right with this container */}
+                        <div className={styles.chatSenderColor}>{e.chatMessage} </div>
+                      </div>
                     </div>
                     :
                     <div className={styles.chatReceiver}>
                       <div className={styles.user}>{e.user}</div>
+                      <div className={styles.chatReceiverWidth}> {/* Aligns right with this container */}
                       <div className={styles.chatReceiverColor}>{e.chatMessage}</div>
+                      </div>
                     </div>
 
                   }
