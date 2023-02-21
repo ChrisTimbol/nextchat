@@ -7,39 +7,30 @@ import { useEffect, useState } from 'react'
 const socket = io('http://localhost:8000')
 
 export default function Home() {
-  const [chatText, setChatText] = useState("") // chat Typed in input
-  const [chatPrint, setChatPrint] = useState([]) // chat received from server
+  const [userBox, setUserBox] = useState('') // chat typed in userBox
+  const [chatBox, setChatBox] = useState('') // chat Typed in input
 
+  // object used to setMessage
+  /*   const messageFormat = {
+      user: '',
+      chatMessage: ''
+    } */
+  const [message, setMessage] = useState({})
 
-  // use for reference of id
-  const [newUserInputBox, setNewUserInputBox] = useState("") // what user typed in nickname input box
+  const [messageFromServer, setMessageFromServer] = useState([]) // chat received from server
 
-/* Need to figure out how to have multiple nickname users */
-
-  // This is what we receive back from server
-  const [nickname, setNickName] = useState('')
-
-
-
-  // sends 'chatText' to server
-  const sendChat = () => { // 
-    socket.emit("chatToServer", chatText)
+  const sendMessageToServer = () => {
+    socket.emit("messageToServer", message)
+    console.log(message)
   }
-  // server listener for 'chatToClient' 
-  socket.on('chatToClient', (data) => {
-    if (data !== null && data.trim() !== "") setChatPrint([...chatPrint, data])
-    setChatText("")
+
+
+  socket.on('messageToClient', (data) => {
+    /*  if (data['chatMessage'] !== null && data['chatMessage'].trim() !== "")  */
+    setMessageFromServer([...messageFromServer, data])
+    // setChatBox('')
   })
 
-
-  socket.on('nicknameToClient', (data) => {
-    setNickName(data)
-
-  })
-
-  const sendUserToServer = (e) => {
-    socket.emit("newUser", newUserInputBox)
-  }
   return (
     <>
       <Head>
@@ -49,48 +40,43 @@ export default function Home() {
         <link rel="icon" href="" />
       </Head>
       <main className={styles.main}>
-
         <div className={styles.pageContainer}>
 
+          <form onSubmit={(e) => {
+            e.preventDefault()
+            setMessage({ user: userBox })
+          }} className={styles.nicknameContainer}>
+            Nickname:
+            <input type="text" className={styles.nicknameInput} onChange={(e) => setUserBox(e.target.value)}></input>
+            <button className={styles.nicknameButton} value="Submit" type="submit">Send</button>
+          </form>
 
           <div className={styles.chatContainer}>
-
             <div className={styles.chatSentContainer}>
-              {chatPrint.map((e) => (
-                <div className={styles.chatStyle}>
-{/*                   {nickname == nicknameSaved ?
-                    ( 
-    */}
-                      <>
-                        <div className={styles.chatSender}>{nickname}:</div>
-                        <div>{e}</div>
-                      </>
-{/*                     )
-                    : 
-                    (
-                      <>
-                        <div className={styles.chatReceiver}>{nickname}:</div>
-                        <div>{e}</div>
-                      </>
-                    )}  
-*/}
 
+
+              {messageFromServer.map((e, i) => (
+                <div key={i} className={styles.chatStyle}>
+                  <div className={styles.chatSender}>{e.user}:</div>
+                  <div>{e.chatMessage}</div>
                 </div>
-              ))}
+              ))}  
+ 
+
             </div>
 
-            <div className={styles.bottomContainer}>
-              <input type="text" value={chatText} className={styles.inputBox} onChange={(e) => setChatText(e.target.value)}></input>
-              <button className={styles.sendButton} onClick={sendChat}>Send</button>
-            </div>
+            <form onSubmit={(e) => {
+              e.preventDefault()
+              sendMessageToServer()
+            }} className={styles.bottomContainer}>
+
+              <input type="text" className={styles.inputBox} onChange={(e) => setMessage({ user: userBox, chatMessage: e.target.value })}></input>
+              <button className={styles.sendButton} value="Submit" type="submit">Send</button>
+
+            </form>
           </div>
         </div>
-        <div className={styles.nicknameContainer}>
-          Nickname:
-          <input type="text" value={newUserInputBox} className={styles.nicknameInput} onChange={(e) => setNewUserInputBox(e.target.value)}></input>
-          <button className={styles.nicknameButton} onClick={sendUserToServer}>Send</button>
 
-        </div>
       </main>
     </>
   )
