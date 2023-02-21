@@ -9,7 +9,6 @@ const socket = io('http://localhost:8000')
 export default function Home() {
   const [userBox, setUserBox] = useState('') // chat typed in userBox
   const [chatBox, setChatBox] = useState('') // chat Typed in input
-  //  const [savedUser, setSavedUser] = useState(userBox) // save username on client
   const [message, setMessage] = useState({}) // chat sent to server
 
   const [messageFromServer, setMessageFromServer] = useState([]) // chat received from server
@@ -37,7 +36,6 @@ export default function Home() {
           <form onSubmit={(e) => {
             e.preventDefault()
             setMessage({ user: userBox })
-            //     setSavedUser(userBox)
           }} className={styles.nicknameContainer}>
             Nickname:
             <input type="text" className={styles.nicknameInput} onChange={(e) => setUserBox(e.target.value)}></input>
@@ -52,18 +50,17 @@ export default function Home() {
                   {e.user == message['user'] ?
                     <div className={styles.chatSender}>
                       <div className={styles.user}>{e.user}</div>
-                      <div className={styles.chatSenderWidth}> {/* Aligns right with this container */}
+                      <div className={styles.chatSenderWidth}>
                         <div className={styles.chatSenderColor}>{e.chatMessage} </div>
                       </div>
                     </div>
                     :
                     <div className={styles.chatReceiver}>
                       <div className={styles.user}>{e.user}</div>
-                      <div className={styles.chatReceiverWidth}> {/* Aligns right with this container */}
-                      <div className={styles.chatReceiverColor}>{e.chatMessage}</div>
+                      <div className={styles.chatReceiverWidth}> 
+                        <div className={styles.chatReceiverColor}>{e.chatMessage}</div>
                       </div>
                     </div>
-
                   }
                 </div>
               )}
