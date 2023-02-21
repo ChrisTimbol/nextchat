@@ -15,11 +15,11 @@
 }
 
 .chatSentContainer{
-
     height: 90%;
     width: 100%;
     justify-content: center;
     align-content: center;
+    overflow-y: auto;
 }
 
 .chatSent{
@@ -66,3 +66,4 @@
     background: blue;
     text-align:left;
 }
+
