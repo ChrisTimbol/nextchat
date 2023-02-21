@@ -9,7 +9,7 @@ const socket = io('http://localhost:8000')
 export default function Home() {
   const [userBox, setUserBox] = useState('') // chat typed in userBox
   const [chatBox, setChatBox] = useState('') // chat Typed in input
-
+  //  const [savedUser, setSavedUser] = useState(userBox) // save username on client
   const [message, setMessage] = useState({}) // chat sent to server
 
   const [messageFromServer, setMessageFromServer] = useState([]) // chat received from server
@@ -37,6 +37,7 @@ export default function Home() {
           <form onSubmit={(e) => {
             e.preventDefault()
             setMessage({ user: userBox })
+            //     setSavedUser(userBox)
           }} className={styles.nicknameContainer}>
             Nickname:
             <input type="text" className={styles.nicknameInput} onChange={(e) => setUserBox(e.target.value)}></input>
@@ -46,23 +47,32 @@ export default function Home() {
           <div className={styles.chatContainer}>
             <div className={styles.chatSentContainer}>
 
-              {/* Messages from all user format*/}
-              {messageFromServer.map((e, i) => (
+              {messageFromServer.map((e, i) =>
                 <div key={i} className={styles.chatStyle}>
-                  <div className={styles.chatSender}>{e.user}:</div>
-                  <div className={styles.scrollView}>{e.chatMessage}</div>
+                  {e.user == message['user'] ?
+                    <div className={styles.chatSender}>
+                      <div className={styles.user}>{e.user}</div>
+                      <div className={styles.chatSenderWidth}><div className={styles.chatSenderColor}>{e.chatMessage} </div></div>
+                    </div>
+                    :
+                    <div className={styles.chatReceiver}>
+                      <div className={styles.user}>{e.user}</div>
+                      <div className={styles.chatReceiverColor}>{e.chatMessage}</div>
+                    </div>
+
+                  }
                 </div>
-              ))}
+              )}
             </div>
 
             <form onSubmit={(e) => {
               e.preventDefault()
               sendMessageToServer()
-            }}className={styles.bottomContainer}>
+            }} className={styles.bottomContainer}>
               <input type="text" value={chatBox} className={styles.inputBox} onChange={(e) => setChatBox(e.target.value)}></input>
               <button className={styles.sendButton} value="Submit" onClick={() => {
                 setMessage({ user: userBox, chatMessage: chatBox })
-                }} type="submit">Send</button>
+              }} type="submit">Send</button>
             </form>
           </div>
         </div>

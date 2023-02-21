@@ -8,23 +8,18 @@
 }
 
 .chatContainer{
-
-    width: 40vw;
-    height: 40vh;
-    border: 1px solid #2d2d2d;
+    height: 50vw;
+    height: 50vh;
+    border: 1px solid gray;
 }
 
 .chatSentContainer{
     height: 90%;
     width: 100%;
-    justify-content: center;
-    align-content: center;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
-.chatSent{
- 
-}
+
 .bottomContainer{
     height: 10%;
     width: 100%;
@@ -37,33 +32,54 @@
     font-size: 20px; 
 }
 .sendButton{
-   width: 30%;
-   height: 100%; 
+    width: 30%;
+    height: 100%; 
 }
 
-.nicknameContainer{
-   display: flex;
-   justify-content: center;
-   align-items: center;
-    
+.user{
+    font-size: 0.7rem;
 }
 
-.nickname{
-
-    margin-right: 0.5rem;
+.chatStyle{
+    width: 100%;
+    border: solid 1px #EEE; 
+    padding: 10px; 
 }
 
 .chatSender{
-    display: flex;
-    color: blue;
-   
+    margin-top: 30px;
     text-align: right;
 }
 
+.chatSenderColor{
+    background: #218aff;
+    color: #fdfdfd;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: right;
+    width: fit-content;
+
+}
+
 .chatReceiver{
+    width: fit-content;
+    padding-top: 30px;
+ 
+}
+
+.chatSenderWidth{
+    width: 100%;
     display: flex;
-    color: red;
-    background: blue;
-    text-align:left;
+    justify-content: flex-end;
+}
+
+.chatReceiverColor{
+    background: #d8d8d8;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
