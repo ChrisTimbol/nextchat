@@ -10,25 +10,17 @@ export default function Home() {
   const [userBox, setUserBox] = useState('') // chat typed in userBox
   const [chatBox, setChatBox] = useState('') // chat Typed in input
 
-  // object used to setMessage
-  /*   const messageFormat = {
-      user: '',
-      chatMessage: ''
-    } */
-  const [message, setMessage] = useState({})
+  const [message, setMessage] = useState({}) // chat sent to server
 
   const [messageFromServer, setMessageFromServer] = useState([]) // chat received from server
 
   const sendMessageToServer = () => {
     socket.emit("messageToServer", message)
-    console.log(message)
   }
 
-
   socket.on('messageToClient', (data) => {
-    /*  if (data['chatMessage'] !== null && data['chatMessage'].trim() !== "")  */
-    setMessageFromServer([...messageFromServer, data])
-    // setChatBox('')
+    if (data['chatMessage'] !== null && data['chatMessage'].trim() !== "") setMessageFromServer([...messageFromServer, data])
+    setChatBox('')
   })
 
   return (
@@ -54,25 +46,23 @@ export default function Home() {
           <div className={styles.chatContainer}>
             <div className={styles.chatSentContainer}>
 
-
+              {/* Messages from all user format*/}
               {messageFromServer.map((e, i) => (
                 <div key={i} className={styles.chatStyle}>
                   <div className={styles.chatSender}>{e.user}:</div>
-                  <div>{e.chatMessage}</div>
+                  <div className={styles.scrollView}>{e.chatMessage}</div>
                 </div>
-              ))}  
- 
-
+              ))}
             </div>
 
             <form onSubmit={(e) => {
               e.preventDefault()
               sendMessageToServer()
-            }} className={styles.bottomContainer}>
-
-              <input type="text" className={styles.inputBox} onChange={(e) => setMessage({ user: userBox, chatMessage: e.target.value })}></input>
-              <button className={styles.sendButton} value="Submit" type="submit">Send</button>
-
+            }}className={styles.bottomContainer}>
+              <input type="text" value={chatBox} className={styles.inputBox} onChange={(e) => setChatBox(e.target.value)}></input>
+              <button className={styles.sendButton} value="Submit" onClick={() => {
+                setMessage({ user: userBox, chatMessage: chatBox })
+                }} type="submit">Send</button>
             </form>
           </div>
         </div>
