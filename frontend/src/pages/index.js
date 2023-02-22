@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '@/styles/Home.module.css'
 import { io } from "socket.io-client"
-import { useEffect, useState, useRef} from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 const socket = io('http://localhost:8000')
 
@@ -11,8 +11,9 @@ export default function Home() {
   const [chatBox, setChatBox] = useState('') // chat Typed in input
   const [message, setMessage] = useState({}) // chat sent to server
   const [messageFromServer, setMessageFromServer] = useState([]) // chat received from server
-
+  const [hidden, setHidden] = useState(true)
   const chatRef = useRef()
+
 
   const sendMessageToServer = () => {
     socket.emit("messageToServer", message)
@@ -22,12 +23,12 @@ export default function Home() {
   socket.on('messageToClient', (data) => {
     if (data['chatMessage'] !== null && data['chatMessage'].trim() !== "") setMessageFromServer([...messageFromServer, data])
     setChatBox('')
-   
+
   })
 
-  useEffect(() =>{ // scroll chat down with new msgs
+  useEffect(() => { // scroll chat down with new msgs
     chatRef.current.scrollTop = chatRef.current.scrollHeight
-  },[messageFromServer])
+  }, [messageFromServer])
 
   return (
     <>
@@ -40,21 +41,26 @@ export default function Home() {
       <main className={styles.main}>
         <div className={styles.pageContainer}>
 
-          <form onSubmit={(e) => {
-            e.preventDefault()
-            setMessage({ user: userBox })
-          }} className={styles.nicknameContainer}>
-            Nickname:
-            <input type="text" className={styles.nicknameInput} value={userBox} onChange={(e) => setUserBox(e.target.value)}></input>
-            <button className={styles.nicknameButton} value="Submit" type="submit">Send</button>
-          </form>
 
-          <div   className={styles.chatContainer}>
+
+          <div className={styles.chatContainer}>
+            {hidden ?
+              <form onSubmit={(e) => {
+                e.preventDefault()
+                setMessage({ user: userBox })
+              }} className={styles.nicknameContainer}>
+                Nickname:
+                <input type="text" className={styles.nicknameInput} value={userBox} onChange={(e) => setUserBox(e.target.value)}></input>
+                <button className={styles.nicknameButton} onClick={() => setHidden(s => !s)} value="Submit" type="submit">Send</button>
+              </form>
+              : null
+            }
+
             <div ref={chatRef} className={styles.chatSentContainer}>
 
               {messageFromServer.map((e, i) =>
-                <div  key={i} className={styles.chatStyle}>
-                  { e.user == message['user']  ?
+                <div key={i} className={styles.chatStyle}>
+                  {e.user == message['user'] ?
                     <div className={styles.chatSender}>
                       <div className={styles.user}>{e.user}</div>
                       <div className={styles.chatSenderWidth}>
@@ -64,7 +70,7 @@ export default function Home() {
                     :
                     <div className={styles.chatReceiver}>
                       <div className={styles.user}>{e.user}</div>
-                      <div className={styles.chatReceiverWidth}> 
+                      <div className={styles.chatReceiverWidth}>
                         <div className={styles.chatReceiverColor}>{e.chatMessage}</div>
                       </div>
                     </div>
@@ -76,7 +82,7 @@ export default function Home() {
             <form onSubmit={(e) => {
               e.preventDefault()
               sendMessageToServer()
-              
+
             }} className={styles.bottomContainer}>
               <input type="text" value={chatBox} className={styles.inputBox} onChange={(e) => setChatBox(e.target.value)}></input>
               <button className={styles.sendButton} value="Submit" onClick={() => {
