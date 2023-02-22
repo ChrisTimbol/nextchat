@@ -6,7 +6,7 @@
     "server": "npm run --prefix backend start",
     "client": "npm run --prefix frontend dev",
     "dev": " concurrently \"npm run server\" \"npm run client\"",
-    "build": "next build",
+    "build": "concurrently \"npm run server\" \"npm run client\"",
     "start": "next start",
     "lint": "next lint"
   },
