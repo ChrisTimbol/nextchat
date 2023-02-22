@@ -4,6 +4,9 @@ import styles from '@/styles/Home.module.css'
 import { io } from "socket.io-client"
 import { useEffect, useState, useRef } from 'react'
 
+import ChatReceiver from '/components/ChatReceiver.jsx'
+import ChatSender from '/components/ChatSender.jsx'
+
 const socket = io('http://localhost:8000')
 
 export default function Home() {
@@ -11,16 +14,17 @@ export default function Home() {
   const [chatBox, setChatBox] = useState('') // chat Typed in input
   const [message, setMessage] = useState({}) // chat sent to server
   const [messageFromServer, setMessageFromServer] = useState([]) // chat received from server
-  const [hidden, setHidden] = useState(true)
+  const [hiddenNickName, setHiddenNickName] = useState(true)
   const chatRef = useRef()
 
-
+  /* Emits msg to server */
   const sendMessageToServer = () => {
     socket.emit("messageToServer", message)
     //setUserBox('')
   }
-
+  /* Listens for new msgs to server */
   socket.on('messageToClient', (data) => {
+    /* Doesnt allow empty msgs */
     if (data['chatMessage'] !== null && data['chatMessage'].trim() !== "") setMessageFromServer([...messageFromServer, data])
     setChatBox('')
 
@@ -38,60 +42,53 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.pageContainer}>
 
-
-
-          <div className={styles.chatContainer}>
-            {hidden ?
-              <form onSubmit={(e) => {
-                e.preventDefault()
-                setMessage({ user: userBox })
-              }} className={styles.nicknameContainer}>
-                Nickname:
-                <input type="text" className={styles.nicknameInput} value={userBox} onChange={(e) => setUserBox(e.target.value)}></input>
-                <button className={styles.nicknameButton} onClick={() => setHidden(s => !s)} value="Submit" type="submit">Send</button>
-              </form>
-              : null
-            }
-
-            <div ref={chatRef} className={styles.chatSentContainer}>
-
-              {messageFromServer.map((e, i) =>
-                <div key={i} className={styles.chatStyle}>
-                  {e.user == message['user'] ?
-                    <div className={styles.chatSender}>
-                      <div className={styles.user}>{e.user}</div>
-                      <div className={styles.chatSenderWidth}>
-                        <div className={styles.chatSenderColor}>{e.chatMessage} </div>
-                      </div>
-                    </div>
-                    :
-                    <div className={styles.chatReceiver}>
-                      <div className={styles.user}>{e.user}</div>
-                      <div className={styles.chatReceiverWidth}>
-                        <div className={styles.chatReceiverColor}>{e.chatMessage}</div>
-                      </div>
-                    </div>
-                  }
-                </div>
-              )}
-            </div>
-
+      <main className={styles.pageContainer}>
+        <div className={styles.chatContainer}>
+          {/* Nickname box that hide after input */}
+          {hiddenNickName ?
             <form onSubmit={(e) => {
               e.preventDefault()
-              sendMessageToServer()
+              if (userBox.trim() !== '') {
+                setMessage({ user: userBox }) // setmessage gets sent to backend once msg submitted
+                setHiddenNickName(s => !s) // toggle nickname box
+              }
+            }} className={styles.nicknameContainer}>
 
-            }} className={styles.bottomContainer}>
-              <input type="text" value={chatBox} className={styles.inputBox} onChange={(e) => setChatBox(e.target.value)}></input>
-              <button className={styles.sendButton} value="Submit" onClick={() => {
-                setMessage({ user: userBox, chatMessage: chatBox })
-              }} type="submit">Send</button>
+              <input type="text" placeholder="Nickname" className={styles.nicknameInput} value={userBox} onChange={(e) => setUserBox(e.target.value)}></input>
+              <button className={styles.nicknameButton} value="Submit" type="submit">Send</button>
             </form>
-          </div>
-        </div>
+            : null
+          }
 
+          {/* Chat msgs from all users*/}
+    
+          <div ref={chatRef} className={styles.chatMsgContainer}>
+
+            {messageFromServer.map((e, i) =>
+              <div key={i} className={styles.chatStyle}>
+                {e.user == message['user'] ?
+                  <ChatReceiver user={e.user} chatMessage={e.chatMessage} />
+                  :
+                  <ChatSender user={e.user} chatMessage={e.chatMessage} />
+                }
+              </div>
+            )}
+          </div>
+     
+          {!hiddenNickName ?
+          <form onSubmit={(e) => {
+            e.preventDefault()
+            sendMessageToServer()
+          }} className={styles.bottomContainer}>
+            <input type="text" value={chatBox} className={styles.inputBox} onChange={(e) => setChatBox(e.target.value)}></input>
+            <button className={styles.sendButton} value="Submit" onClick={() => {
+              setMessage({ user: userBox, chatMessage: chatBox })
+            }} type="submit">Send</button>
+          </form>
+          : null }
+        </div>
+      
       </main>
     </>
   )
