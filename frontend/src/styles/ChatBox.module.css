@@ -1,0 +1,35 @@
+.chatSender{
+    text-align: right;
+ 
+}
+
+
+.chatSenderColor{
+    background: #218aff;
+    color: #fdfdfd;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: right;
+}
+
+.chatReceiver{
+    width: fit-content;
+}
+
+
+.chatSenderWidth{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.chatReceiverColor{
+    background: #d8d8d8;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
