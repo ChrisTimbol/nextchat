@@ -11,7 +11,7 @@ I wanted to learn more about the backend and websockets/socket.io
 
 ## Problems I ran into
 - username was getting updated whenever the user changed his name. This issue was due to using a state variable. I fixed this issue by converting the variable to a string that way it was immutable.
-- I had to figure out how to scroll down the chat with every new message. What worked for me was using the useRef() react hook. and connecting it as a attribute to the chat container. And when ever the chat container increased in size i set ref.current.scrollTop = ref.current.scrollHeight
+- I had to figure out how to scroll down the chat with every new message. What worked for me was using the useRef() react hook. and connecting it as a attribute to the chat container. When ever the chat container increased in size i set ref.current.scrollTop = ref.current.scrollHeight
 
 ## Framework/Libraries used
  Built with 
