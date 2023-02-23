@@ -18,7 +18,7 @@ I wanted to learn more about the backend and websockets/socket.io
  - Express
  
 ## Screenshots
-image.png
+![image](https://user-images.githubusercontent.com/23703863/220799677-71b06587-d63c-4047-9c60-03be11608427.png)
 
 
 ## How to use?
