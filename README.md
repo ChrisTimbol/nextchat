@@ -24,10 +24,11 @@ I wanted to learn more about the backend and websockets/socket.io
 ## How to use?
 
 #### Not currently deployed due to the cost to host on backend
-#### or 
+
 
 You will need [Node.js](https://nodejs.org) version 8.0 or greater installed on your system.
 ```
+git clone
 npm install
 ```
 Run the development server from the root folder.
