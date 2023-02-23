@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "server": "npm run --prefix backend start",
+    "server": "npm run -prefix backend start",
     "client": "npm run --prefix frontend dev",
-    "dev": "npm run server && npm run client",
+    "dev": "concurrently \"npm run server\"  \"npm run client\"",
     "build": "npm run server && npm run client",
     "start": "next start",
     "lint": "next lint"
