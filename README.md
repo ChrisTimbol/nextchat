@@ -9,6 +9,10 @@ I wanted to learn more about the backend and websockets/socket.io
 - I used a `nodemon` and `concurrently` npm packages for the first time. Nodemon made it easier to make adjustments on the backend without having to constantly restart the program. Concurrrently made it so i can run frontend and backend concurrently
 
 
+## Problems I ran into
+- username was getting updated whenever the user changed his name. This issue was due to using a state variable. I fixed this issue by converting the variable to a string that way it was immutable.
+- I had to figure out how to scroll down the chat with every new message. What worked for me was using the useRef() react hook. and connecting it as a attribute to the chat container. And when ever the chat container increased in size i set ref.current.scrollTop = ref.current.scrollHeight
+
 ## Framework/Libraries used
  Built with 
  - React 
