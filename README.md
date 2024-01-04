@@ -1,7 +1,7 @@
 ## Chat App
 
 ## Motivation 
-I wanted to learn more about the backend and websockets/socket.io 
+I wanted to learn more about the backend and how to use websockets with socket.io
 
 ## What I Learned
 - websockets  can make a quick low-latency, bidirectional and event-based communication between client and server
@@ -32,12 +32,14 @@ I wanted to learn more about the backend and websockets/socket.io
 
 You will need [Node.js](https://nodejs.org) version 8.0 or greater installed on your system.
 ```
-git clone
+git clone https://github.com/ChrisTimbol/nextchat.git
 npm install
+
 ```
 Run the development server from the root folder.
 ```bash
 npm run dev
-
+Create two seperate windows one incognito one regular and you can see the chat working perfectly with different users!
+You can also do use different browsers such as chrome and edge
 ```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
